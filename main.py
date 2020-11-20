@@ -147,6 +147,81 @@ def game():
 
     return done
 
+
+def high_score_screen():
+    high_scores_file_name = "high_scores.txt"
+
+    with open(high_scores_file_name,'r') as f:
+        scores = list(map(int,f.readlines()))
+    
+    high_score_heading_font = pygame.font.SysFont('comicsansms',50)
+    high_score_font = pygame.font.SysFont('comicsansms',40)
+    
+    screen.fill(LIGHT_GREEN)
+    high_score_heading_text = high_score_heading_font.render("HIGH SCORES",True,RED)
+    high_score_heading_position = 20
+    screen.blit(high_score_heading_text,(BOARD_WIDTH//2 - high_score_heading_text.get_width()//2,high_score_heading_position))
+
+    left_gap = BOARD_WIDTH//2 - 20 
+    
+    top_gap = high_score_heading_position + high_score_heading_text.get_height() +  20
+    gap_between_scores = 75
+    for i in range(5):
+        score = scores[i]
+        score_text = high_score_font.render(f"{i + 1}. {score:>02}",True,RED)
+        screen.blit(score_text,(left_gap - score_text.get_width(),top_gap + (i * gap_between_scores)))
+
+
+    left_gap = BOARD_WIDTH//2  + 20
+    for i in range(5,len(scores)):
+        score = scores[i]
+        score_text = high_score_font.render(f"{i + 1}. {score:>02}",True,RED)
+        screen.blit(score_text,(left_gap,top_gap + ((i - 5) * gap_between_scores)))
+
+    
+    back_button_text = high_score_font.render("BACK",True,BLACK,RED)
+    back_button_text_rect = back_button_text.get_rect(center=(BOARD_WIDTH//2,BOARD_HEIGHT-30))
+    back_button_text_rect.bottom = BOARD_HEIGHT - 100
+    
+    screen.blit(back_button_text,back_button_text_rect)
+
+
+    pygame.display.update()
+    
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                x,y = pygame.mouse.get_pos()
+
+                if back_button_text_rect.collidepoint(x,y):
+                    return
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 def menu():
     # add button for high scores
 
@@ -213,7 +288,7 @@ def menu():
                 coordinate = pygame.mouse.get_pos()
 
                 if high_scores_rect.collidepoint(coordinate):
-                    print('clicked here')
+                    high_score_screen()
 
 
 
