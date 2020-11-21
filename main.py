@@ -1,3 +1,7 @@
+import os
+
+os.environ['SDL_VIDEO_WINDOW_POS'] = "100,30"
+
 import pygame,sys,random
 from snake import Snake
 
