@@ -113,7 +113,10 @@ def game():
                     sys.exit()
                 if event.type == SECOND_ELAPSED:
                     time -= 1
+            
 
+            if time == 0:
+                break
             screen.fill(LIGHT_BLUE) 
             draw_board()
             food.draw(screen)
@@ -168,6 +171,7 @@ def game():
                 snake.reset()
                 food = Food(ROWS,COLS,CELL_WIDTH,40) #or just reset
                 info_bar.reset()
+                hit_sound.stop()
                 countdown()
                 pygame.mixer.music.load('Arizona-Sunset.mp3')
                 pygame.mixer.music.play(-1)
