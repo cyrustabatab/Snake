@@ -5,6 +5,7 @@ os.environ['SDL_VIDEO_WINDOW_POS'] = "100,30"
 import pygame,sys,random
 from snake import Snake
 
+# TODO make sure apples dont spawn on snake
 
 pygame.mixer.pre_init(44100,-16,2,512) #frequency,size,channels,buffer_szie
 pygame.init()
