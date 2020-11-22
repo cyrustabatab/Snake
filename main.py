@@ -93,17 +93,48 @@ def game_over():
     return False ,menu
 
 
+
+
+
 def game():
+
+    def countdown(): 
+        
+        countdown_font = pygame.font.SysFont('comicsansms',42)
+
+        SECOND_ELAPSED = pygame.USEREVENT
+        time =3 
+        pygame.time.set_timer(SECOND_ELAPSED,1000)
+        while time > 0:
+
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+                if event.type == SECOND_ELAPSED:
+                    time -= 1
+
+            screen.fill(LIGHT_BLUE) 
+            draw_board()
+            food.draw(screen)
+            snake.draw(screen)
+            info_bar.display_score(screen)
+            countdown_text = countdown_font.render(str(time),True,BLACK)
+            screen.blit(countdown_text,(BOARD_WIDTH//2 - countdown_text.get_width()//2,BOARD_HEIGHT//2 - countdown_text.get_height()//2))
+            pygame.display.update()
+
+        pygame.time.set_timer(SECOND_ELAPSED,0)
+
     snake = Snake()
     food = Food(ROWS,COLS,CELL_WIDTH,40)
     high_scores_file_name = 'high_scores.txt'
     info_bar = InfoBar(screen,high_scores_file_name)
 
     hit_sound = pygame.mixer.Sound('vgdeathsound.ogg')
+    countdown()
     pygame.mixer.music.load('Arizona-Sunset.mp3')
     pygame.mixer.music.play(-1)
     done = False
-
     while not done:
         
         changed_direction = False
@@ -134,11 +165,12 @@ def game():
             if menu:
                 return
             if not done:
-                pygame.mixer.music.load('Arizona-Sunset.mp3')
-                pygame.mixer.music.play(-1)
                 snake.reset()
                 food = Food(ROWS,COLS,CELL_WIDTH,40) #or just reset
                 info_bar.reset()
+                countdown()
+                pygame.mixer.music.load('Arizona-Sunset.mp3')
+                pygame.mixer.music.play(-1)
         food.is_eaten(snake,info_bar)
         screen.fill(LIGHT_BLUE) 
         draw_board()
@@ -202,25 +234,6 @@ def high_score_screen():
 
                 if back_button_text_rect.collidepoint(x,y):
                     return
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -293,8 +306,6 @@ def menu():
 
                 if high_scores_rect.collidepoint(coordinate):
                     high_score_screen()
-
-
 
 
             if event.type == SPAWNSNAKE:
