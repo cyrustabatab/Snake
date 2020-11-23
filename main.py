@@ -59,7 +59,7 @@ def game_over():
     pygame.mixer.music.load("Retro_No hope.ogg")
     pygame.mixer.music.play()
     done = False
-    game_over_font = pygame.font.SysFont("comicsansms",50)
+    game_over_font = pygame.font.Font("atari.ttf",50)
     game_over_text = game_over_font.render("GAME OVER",True,RED)
     play_again_text = game_over_font.render("PLAY AGAIN",True,GREEN,RED)
     menu_text = game_over_font.render("MENU",True,GREEN,RED)
@@ -101,10 +101,11 @@ def game():
 
     def countdown(): 
         
-        countdown_font = pygame.font.SysFont('comicsansms',42)
+        countdown_font = pygame.font.Font('atari.ttf',42)
 
         SECOND_ELAPSED = pygame.USEREVENT
         time =3 
+        beep_sound.play()
         pygame.time.set_timer(SECOND_ELAPSED,1000)
         while time > 0:
 
@@ -114,10 +115,13 @@ def game():
                     sys.exit()
                 if event.type == SECOND_ELAPSED:
                     time -= 1
+                    if time != 0:
+                        beep_sound.play()
             
 
             if time == 0:
                 break
+
             screen.fill(LIGHT_BLUE) 
             draw_board()
             food.draw(screen)
@@ -130,11 +134,12 @@ def game():
         pygame.time.set_timer(SECOND_ELAPSED,0)
 
     snake = Snake()
-    food = Food(ROWS,COLS,CELL_WIDTH,40)
+    food = Food(ROWS,COLS,snake,CELL_WIDTH,40)
     high_scores_file_name = 'high_scores.txt'
     info_bar = InfoBar(screen,high_scores_file_name)
 
     hit_sound = pygame.mixer.Sound('vgdeathsound.ogg')
+    beep_sound = pygame.mixer.Sound('beep.ogg')
     countdown()
     pygame.mixer.music.load('Arizona-Sunset.mp3')
     pygame.mixer.music.play(-1)
@@ -162,6 +167,12 @@ def game():
 
         snake.update()
         if snake.has_collided_with_wall(40,BOARD_HEIGHT,0,BOARD_WIDTH) or snake.has_collided_with_tail():
+            screen.fill(LIGHT_BLUE) 
+            draw_board()
+            food.draw(screen)
+            snake.draw(screen)
+            info_bar.display_score(screen)
+            pygame.display.update()
             hit_sound.play()
             info_bar.update_high_scores_if_needed()
             pygame.mixer.music.stop()
@@ -170,13 +181,13 @@ def game():
                 return
             if not done:
                 snake.reset()
-                food = Food(ROWS,COLS,CELL_WIDTH,40) #or just reset
+                food = Food(ROWS,COLS,snake,CELL_WIDTH,40) #or just reset
                 info_bar.reset()
                 hit_sound.stop()
                 countdown()
                 pygame.mixer.music.load('Arizona-Sunset.mp3')
                 pygame.mixer.music.play(-1)
-        food.is_eaten(snake,info_bar)
+        food.is_eaten(info_bar)
         screen.fill(LIGHT_BLUE) 
         draw_board()
         food.draw(screen)
@@ -195,8 +206,8 @@ def high_score_screen():
     with open(high_scores_file_name,'r') as f:
         scores = list(map(int,f.readlines()))
     
-    high_score_heading_font = pygame.font.SysFont('comicsansms',50)
-    high_score_font = pygame.font.SysFont('comicsansms',40)
+    high_score_heading_font = pygame.font.Font('atari.ttf',50)
+    high_score_font = pygame.font.Font('atari.ttf',40)
     
     screen.fill(LIGHT_GREEN)
     high_score_heading_text = high_score_heading_font.render("HIGH SCORES",True,RED)
@@ -247,8 +258,8 @@ def high_score_screen():
 def menu():
     # add button for high scores
 
-    title_font = pygame.font.SysFont('comicsansms',50)
-    instructions_font = pygame.font.SysFont('comicsansms',25)
+    title_font = pygame.font.Font('atari.ttf',30)
+    instructions_font = pygame.font.Font('atari.ttf',15)
     title_text = title_font.render('SNAKE',True,RED)
     instructions_text_1= instructions_font.render('PRESS ARROWS KEYS TO TURN AND COLLECT APPLES!',True,RED)
     instructions_text_2 = instructions_font.render("AVOID HITTING YOUR TAIL AND THE WALLS!",True,RED) 

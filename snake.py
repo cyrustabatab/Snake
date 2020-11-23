@@ -18,7 +18,7 @@ class Snake:
     TONGUE_WIDTH = 5
     TONGUE_LENGTH = 10
 
-    def __init__(self,start_x=400,start_y=400,square_length=20):
+    def __init__(self,start_x=400,start_y=400,square_length=20,top_gap=40):
         self.squares = []
         self.start_x = start_x
         self.start_y = start_y
@@ -30,6 +30,11 @@ class Snake:
         self.create_snake()
         self.frame_number =-1
         self.show_tongue = True
+        self.top_gap =top_gap
+    
+
+    def body_rows_and_cols(self):
+        return {(square.y//20,(square.x)//20) for square in self.squares}
     
     def reset(self):
         self.squares =[]
@@ -132,9 +137,9 @@ class Snake:
         for i in range(1,len(self.squares)):
             square = self.squares[i]
             if self.head.colliderect(square):
-                print('collided with tail')
-                directions = ['left','right','up','down']
-                print(directions[self.direction])
+                #print('collided with tail')
+                #directions = ['left','right','up','down']
+                #print(directions[self.direction])
                 return True
         
 

@@ -12,7 +12,7 @@ TROPHY_IMAGE.set_colorkey((77,193,249),pygame.RLEACCEL)
 
 
 BLACK = (0,0,0)
-font = pygame.font.SysFont("comicsansms",20)
+font = pygame.font.Font("atari.ttf",20)
 LEFT_OFFSET = 5
 TOP_OFFSET= 5
 
