@@ -227,7 +227,7 @@ def high_score_screen():
     left_gap = BOARD_WIDTH//2  + 20
     for i in range(5,len(scores)):
         score = scores[i]
-        score_text = high_score_font.render(f"{i + 1}. {score:>02}",True,RED)
+        score_text = high_score_font.render(f"{i + 1:>2}. {score:>02}",True,RED)
         screen.blit(score_text,(left_gap,top_gap + ((i - 5) * gap_between_scores)))
 
     
